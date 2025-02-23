@@ -79,5 +79,19 @@
         let userSelection = createUserSelection();
         console.log(userSelection);
         
+        //create a random index
+        //create and return a selection object from that index
+        function createComputerSelection(){
+            //create an index variable: [0,1,2]
+            let index = Math.floor(Math.random() * 3);
+            let name = selections.at(index);
+            let capital = selectionCapitals.at(index);
+            return createSelection(name, index, capital);
+        }
+
+        //get comptuer selection and log it
+        let comptuerSelection = createComputerSelection();
+        console.log(comptuerSelection);
+
     </script>
 </html>
