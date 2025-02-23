@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock-Paper-Scissors</title>
+</head>
+<body>
+    
+</body>
+    <script>
+        //define available three selections
+        const SELECTION_1 = "rock";
+        const SELECTION_2 = "paper";
+        const SELECTION_3 = "scissors"
+
+        //prompt message according to avaliable selections
+        const promptMessage = `${SELECTION_1}-${SELECTION_2}-${SELECTION_3}?`;
+        const promptWarningMessage = `Please enter an eligible selection:`;
+
+        //store first letter capitilazied of selections
+        let selectionCapitals = ["R", "P", "S"];
+
+        //store full name of the selections
+        let selections = [SELECTION_1, SELECTION_2, SELECTION_3];
+
+        //return "" if user selection is falsy (null, undefined, NaN, "")
+        //takes raw user selection and trims & lowers it
+        function sanitizeSelection(userSelection){
+            if(!userSelection) return "";
+            return userSelection.trim().toLocaleLowerCase();
+        }
+
+        //return -1 if not found in the selections or ""
+        //return 0 if rock
+        //       1 if paper
+        //       2 if scissors
+        //takes sanitized selection and returns corresponding index: -1, 0, 1, 2
+        function findSelectionIndex(sanitizedSelection){
+            return (selections.indexOf(sanitizedSelection));
+        }
+
+        //return R if 0
+        //       P if 1
+        //       S if 2
+        //takes selection index as paremeter and returns the corresponding capital: R, P, S
+        function findSelectionCapital(selectionIndex){
+            if(selectionIndex < 0) return "";
+            return selectionCapitals.at(selectionIndex);
+        }
+
+        //creates and returns a selection object from parameters
+        function createSelection(name = "", index = 0, capital = ""){
+            return {
+                name,
+                index,
+                capital,
+            };
+        }
+
+        //prompts for a selection displaying a message
+        //if user selection is eligible returns the selection
+        //else prompts again
+        //then creates and returns selection object
+        function createUserSelection(){
+            let userSelection;
+            let sanitizedSelection;
+            let selectionIndex = -1;
+            while (selectionIndex < 0){
+                userSelection = prompt(promptMessage);
+                sanitizedSelection = sanitizeSelection(userSelection);
+                selectionIndex = findSelectionIndex(sanitizedSelection);
+            }
+            let selectionCapital = findSelectionCapital(selectionIndex);
+            return createSelection(sanitizedSelection, selectionIndex, selectionCapital);
+        }
+
+        //get user selection and log it
+        let userSelection = createUserSelection();
+        console.log(userSelection);
+        
+    </script>
+</html>
