@@ -91,9 +91,9 @@
             return createSelection(name, index, capital);
         }
 
-        //takes the user as parameter
-        //returns a message that annouces the winner and the results.
-        function createWinnerMessage(user, computer){
+        //takes the user and computer as parameter
+        //returns a message that annouces the winner and the results for just one round
+        function createRoundWinnerMessage(user, computer){
             let message;
             switch(user.currentRoundResult){
                 case "win":
@@ -131,84 +131,107 @@
             };
         }
 
+        //creates and prompts selections for players
+        //updates scores and results accordingly
+        //logs the winner
+        function playRound(user, computer){
+            //create and prompt selections
+            let userSelection = createUserSelection();
+            let computerSelection = createComputerSelection();
+            //add selections to players selection lists
+            user.selections.push(userSelection);
+            computer.selections.push(computerSelection);
+            //update scores and round results accordingly
+            switch(userSelection.name){
+                case R:
+                    switch(computerSelection.name){
+                        case R:
+                            user.currentRoundResult = "tie";
+                            computer.currentRoundResult = "tie";
+                            break;
+                        case P:
+                            user.currentRoundResult = "lose";
+                            computer.currentRoundResult = "win";
+                            computer.score++;
+                            break;
+                        case S:
+                            user.currentRoundResult = "win";
+                            user.score++;
+                            computer.currentRoundResult = "lose";
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                case P:
+                    switch(computerSelection.name){
+                        case R:
+                            user.currentRoundResult = "win";
+                            user.score++;
+                            computer.currentRoundResult = "lose";
+                            break;
+                        case P:
+                            user.currentRoundResult = "tie";
+                            computer.currentRoundResult = "tie";
+                            break;
+                        case S:
+                            user.currentRoundResult = "lose";
+                            computer.currentRoundResult = "win";
+                            computer.score++;
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                case S:
+                    switch(computerSelection.name){
+                        case R:
+                            user.currentRoundResult = "lose";
+                            computer.currentRoundResult = "win";
+                            computer.score++;
+                            break;
+                        case P:
+                            user.currentRoundResult = "win";
+                            user.score++
+                            computer.currentRoundResult = "lose";
+                            break;
+                        case S:
+                            user.currentRoundResult = "tie";
+                            user.currentRoundResult = "tie";
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                default:
+                    break;
+            }
+            //generate a message to annouce the winner and results
+            let message = createRoundWinnerMessage(user, computer);
+            //log the message
+            console.log(message)
+        }
+        function createGameWinnerMessage(user, computer){
+            let message = (user.score > computer.score) ? "The game is over. You won!" : "The game is over. Computer won!";
+            return message;
+        }
         function playGame(){
-            //initialise user and computer
+            //define user and computer
             let user = createUser();
             let computer = createComputer();
+            //for 5 rounds
             while(user.score < VICTORY_TRESHOLD && computer.score < VICTORY_TRESHOLD){
-                let userSelection = createUserSelection();
-                let computerSelection = createComputerSelection();
-                user.selections.push(userSelection);
-                computer.selections.push(computerSelection);
-                //update scores and round results accordingly
-                switch(userSelection.name){
-                    case R:
-                        switch(computerSelection.name){
-                            case R:
-                                user.currentRoundResult = "tie";
-                                computer.currentRoundResult = "tie";
-                                break;
-                            case P:
-                                user.currentRoundResult = "lose";
-                                computer.currentRoundResult = "win";
-                                computer.score++;
-                                break;
-                            case S:
-                                user.currentRoundResult = "win";
-                                user.score++;
-                                computer.currentRoundResult = "lose";
-                                break;
-                            default:
-                                break;
-                        }
-                        break;
-                    case P:
-                        switch(computerSelection.name){
-                            case R:
-                                user.currentRoundResult = "win";
-                                user.score++;
-                                computer.currentRoundResult = "lose";
-                                break;
-                            case P:
-                                user.currentRoundResult = "tie";
-                                computer.currentRoundResult = "tie";
-                                break;
-                            case S:
-                                user.currentRoundResult = "lose";
-                                computer.currentRoundResult = "win";
-                                computer.score++;
-                                break;
-                            default:
-                                break;
-                        }
-                        break;
-                    case S:
-                        switch(computerSelection.name){
-                            case R:
-                                user.currentRoundResult = "lose";
-                                computer.currentRoundResult = "win";
-                                computer.score++;
-                                break;
-                            case P:
-                                user.currentRoundResult = "win";
-                                user.score++
-                                computer.currentRoundResult = "lose";
-                                break;
-                            case S:
-                                user.currentRoundResult = "tie";
-                                user.currentRoundResult = "tie";
-                                break;
-                            default:
-                                break;
-                        }
-                        break;
-                    default:
-                        break;
-                }
-                let message = createWinnerMessage(user, computer);
-                console.log(message);
+                playRound(user, computer);
             }
+            //log scores and announce the winner
+            let message = createGameWinnerMessage(user, computer);
+            let scores = `You: ${user.score}, Computer: ${computer.score}`
+            console.log(scores);
+            console.log(message);
         }
+
+        //play 5 rounds
         playGame();
+
     </script>
 </html>
